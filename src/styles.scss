@@ -1,1 +1,29 @@
 /* You can add global styles to this file, and also import other style files */
+@use "tailwindcss";
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* mat-menu panel — rendered in CDK overlay, must be global */
+.mat-mdc-menu-panel {
+  background: #ffffff !important;
+  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.10) !important;
+}
+
+.mat-mdc-menu-item {
+  color: #334155 !important;
+}
+
+.mat-mdc-menu-item .mat-icon,
+.mat-mdc-menu-item .mdc-list-item__primary-text {
+  color: #475569 !important;
+}
+
+.mat-mdc-menu-item:hover:not([disabled]) {
+  background: #fff7ed !important;
+}
+
+.mat-mdc-menu-item:hover:not([disabled]) .mat-icon,
+.mat-mdc-menu-item:hover:not([disabled]) .mdc-list-item__primary-text {
+  color: #c2410c !important;
+}
+
