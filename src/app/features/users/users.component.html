@@ -1,0 +1,20 @@
+<!-- =====================================================
+     USERS PAGE — Página de gestión de usuarios
+     Compone los tres sub-componentes de la feature:
+       1. app-stat-cards   — métricas resumen
+       2. app-user-filter  — campo de búsqueda / filtro
+       3. app-user-table   — tabla paginada de usuarios
+     El filterValue fluye: filter→(filterChange)→page→[filterValue]→table
+     ===================================================== -->
+<div class="flex flex-col gap-3">
+
+  <!-- Sección 1: Tarjetas de métricas -->
+  <app-stat-cards [statCards]="statCards" />
+
+  <!-- Sección 2: Filtro de búsqueda; emite (filterChange) al componente padre -->
+  <app-user-filter (filterChange)="onFilterChange($event)" />
+
+  <!-- Sección 3: Tabla de usuarios; recibe datos y el filtro activo -->
+  <app-user-table [users]="users" [filterValue]="filterValue" />
+
+</div>

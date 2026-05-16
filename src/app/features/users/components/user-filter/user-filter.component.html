@@ -1,0 +1,40 @@
+<!-- =====================================================
+     USER FILTER — Sección de filtro de búsqueda
+     Emite (filterChange) con el texto normalizado cada vez
+     que el usuario escribe en el campo de búsqueda.
+     ===================================================== -->
+<section class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+
+  <!-- Cabecera de la sección -->
+  <header class="flex items-center gap-2 bg-slate-600 px-4 py-3">
+    <mat-icon class="search-header-icon">manage_search</mat-icon>
+    <span class="text-sm font-semibold tracking-wide text-white">Filtro de búsqueda</span>
+  </header>
+
+  <div class="p-4 sm:p-5">
+
+    <!-- Banner de campos obligatorios -->
+    <div class="mb-4 flex items-center gap-2 rounded-lg border border-rose-100 bg-rose-50 px-3 py-2 text-xs font-medium text-rose-600 sm:mb-5">
+      <mat-icon class="!text-base !leading-none text-rose-500">error_outline</mat-icon>
+      <span><strong>*</strong> Campos obligatorios</span>
+    </div>
+
+    <!-- Campo de búsqueda: Usuario -->
+    <div class="w-full max-w-full sm:max-w-xl lg:max-w-2xl">
+      <label for="usuario-search" class="mb-2 block text-sm font-semibold text-slate-700">
+        Usuario <span class="text-rose-500">*</span>
+      </label>
+      <!-- mat-form-field con ícono prefijo y binding al evento input -->
+      <mat-form-field appearance="outline" class="w-full user-search-field">
+        <mat-icon matPrefix class="!text-orange-400">search</mat-icon>
+        <input
+          id="usuario-search"
+          matInput
+          placeholder="Escriba para buscar un usuario..."
+          (input)="onFilter($any($event.target).value)"
+        />
+      </mat-form-field>
+    </div>
+
+  </div>
+</section>

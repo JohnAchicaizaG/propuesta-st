@@ -1,0 +1,30 @@
+<!-- =====================================================
+     STAT CARDS — Cuadrícula de tarjetas de resumen
+     Itera sobre statCards[] y renderiza una tarjeta por métrica.
+     ===================================================== -->
+<div class="grid grid-cols-1 gap-3 rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:grid-cols-2 sm:p-4 md:grid-cols-3 xl:grid-cols-5">
+  @for (stat of statCards; track stat.label) {
+
+    <!-- Tarjeta individual -->
+    <article class="stat-card group flex items-center gap-3 rounded-xl border border-slate-100 bg-slate-50 p-3 transition hover:shadow-md sm:p-4">
+
+      <!-- Ícono con gradiente -->
+      <div
+        class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br text-white shadow-sm"
+        [class]="stat.gradient"
+      >
+        <mat-icon class="!text-2xl !leading-none">{{ stat.icon }}</mat-icon>
+      </div>
+
+      <!-- Texto: etiqueta + valor -->
+      <div class="min-w-0 flex-1">
+        <!-- Tooltip muestra el texto completo cuando se trunca -->
+        <p class="truncate text-xs font-medium text-slate-500"
+           [matTooltip]="stat.label"
+           matTooltipPosition="above">{{ stat.label }}</p>
+        <p class="text-2xl font-bold text-slate-800 leading-tight">{{ stat.value }}</p>
+      </div>
+
+    </article>
+  }
+</div>

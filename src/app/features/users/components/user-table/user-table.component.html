@@ -1,0 +1,132 @@
+<!-- =====================================================
+     USER TABLE — Tabla de usuarios con paginador superior
+     Recibe [users] y [filterValue] como @Input.
+     El paginador se posiciona encima de la tabla.
+     ===================================================== -->
+<section class="rounded-xl border border-slate-200 bg-white shadow-sm">
+
+  <!-- Barra de herramientas: botones de acción + paginador -->
+  <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 px-3 py-3 sm:px-4">
+
+    <!-- Botones de acción global (filtrar, más opciones) -->
+    <div class="flex items-center gap-2">
+      <button mat-mini-fab class="!bg-green-600 !shadow-md" aria-label="Filtrar">
+        <mat-icon class="!text-white">filter_list</mat-icon>
+      </button>
+      <button mat-mini-fab class="!bg-green-600 !shadow-md" aria-label="Mas opciones" [matMenuTriggerFor]="accionesMenu">
+        <mat-icon class="!text-white">more_vert</mat-icon>
+      </button>
+      <!-- Menú desplegable de acciones globales -->
+      <mat-menu #accionesMenu="matMenu">
+        <button mat-menu-item>
+          <mat-icon>download</mat-icon><span>Exportar</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>refresh</mat-icon><span>Actualizar</span>
+        </button>
+      </mat-menu>
+    </div>
+
+    <!-- Paginador (posicionado arriba; CDR.detectChanges en ngAfterViewInit) -->
+    <mat-paginator
+      #tablePaginator
+      class="custom-top-paginator w-full sm:w-auto"
+      [pageSize]="5"
+      [pageSizeOptions]="[5, 10, 20]"
+      [showFirstLastButtons]="false"
+    >
+    </mat-paginator>
+  </div>
+
+  <!-- Contenedor con scroll horizontal para pantallas pequeñas -->
+  <div class="overflow-x-auto">
+    <table
+      mat-table
+      [dataSource]="usersDataSource"
+      class="users-table mat-elevation-z0 min-w-[1080px] w-full text-sm"
+    >
+      <!-- Columna: Acciones — menú contextual por fila (Editar / Ver detalle) -->
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef class="!px-4 !py-3">Acciones</th>
+        <td mat-cell *matCellDef="let user" class="!px-2 !py-1 text-center">
+          <button mat-icon-button [matMenuTriggerFor]="rowMenu" aria-label="Acciones de usuario" class="!text-slate-400">
+            <mat-icon>more_horiz</mat-icon>
+          </button>
+          <mat-menu #rowMenu="matMenu">
+            <button mat-menu-item><mat-icon>edit</mat-icon><span>Editar</span></button>
+            <button mat-menu-item><mat-icon>visibility</mat-icon><span>Ver detalle</span></button>
+          </mat-menu>
+        </td>
+      </ng-container>
+
+      <!-- Columna: Estado — ícono check_circle (activo) / cancel (inactivo) -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef class="!px-4 !py-3">Estado</th>
+        <td mat-cell *matCellDef="let user" class="!px-4 !py-2 text-center">
+          <mat-icon
+            class="!text-xl"
+            [class.!text-emerald-500]="user.status === 'activo'"
+            [class.!text-rose-500]="user.status === 'inactivo'"
+          >{{ user.status === 'activo' ? 'check_circle' : 'cancel' }}</mat-icon>
+        </td>
+      </ng-container>
+
+      <!-- Columna: Usuario — nombre de usuario en negrita -->
+      <ng-container matColumnDef="usuario">
+        <th mat-header-cell *matHeaderCellDef class="!px-4 !py-3">Usuario</th>
+        <td mat-cell *matCellDef="let user" class="!px-4 !py-3 font-semibold text-slate-800">{{ user.usuario }}</td>
+      </ng-container>
+
+      <!-- Columna: Fecha de creación -->
+      <ng-container matColumnDef="fechaCreacion">
+        <th mat-header-cell *matHeaderCellDef class="!px-4 !py-3">Fecha creación</th>
+        <td mat-cell *matCellDef="let user" class="!px-4 !py-3 text-slate-500">{{ user.fechaCreacion }}</td>
+      </ng-container>
+
+      <!-- Columna: Nombre completo -->
+      <ng-container matColumnDef="nombre">
+        <th mat-header-cell *matHeaderCellDef class="!px-4 !py-3">Nombre</th>
+        <td mat-cell *matCellDef="let user" class="!px-4 !py-3 text-slate-700">{{ user.nombre }}</td>
+      </ng-container>
+
+      <!-- Columna: Email -->
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef class="!px-4 !py-3">Email</th>
+        <td mat-cell *matCellDef="let user" class="!px-4 !py-3 text-slate-500">{{ user.email }}</td>
+      </ng-container>
+
+      <!-- Columna: Rol — chip con estilo pill naranja -->
+      <ng-container matColumnDef="rol">
+        <th mat-header-cell *matHeaderCellDef class="!px-4 !py-3">Rol</th>
+        <td mat-cell *matCellDef="let user" class="!px-4 !py-3">
+          <span class="inline-flex items-center whitespace-nowrap rounded-full bg-orange-50 px-2.5 py-0.5 text-xs font-medium text-orange-700 ring-1 ring-inset ring-orange-200">
+            {{ user.rol }}
+          </span>
+        </td>
+      </ng-container>
+
+      <!-- Columna: Última conexión — guión centrado si no hay dato -->
+      <ng-container matColumnDef="ultimaConexion">
+        <th mat-header-cell *matHeaderCellDef class="!px-4 !py-3">Última conexión</th>
+        <td mat-cell *matCellDef="let user" class="!px-4 !py-3"
+          [class.text-slate-500]="user.ultimaConexion !== '-'"
+          [class.text-center]="user.ultimaConexion === '-'"
+          [class.text-slate-300]="user.ultimaConexion === '-'">{{ user.ultimaConexion }}</td>
+      </ng-container>
+
+      <!-- Columna: IP Login — fuente monoespaciada; guión centrado si no hay dato -->
+      <ng-container matColumnDef="ipLogin">
+        <th mat-header-cell *matHeaderCellDef class="!px-4 !py-3">IP Login</th>
+        <td mat-cell *matCellDef="let user" class="!px-4 !py-3 font-mono text-xs"
+          [class.text-slate-400]="user.ipLogin !== '-'"
+          [class.text-center]="user.ipLogin === '-'"
+          [class.text-slate-300]="user.ipLogin === '-'">{{ user.ipLogin }}</td>
+      </ng-container>
+
+      <!-- Fila de encabezado -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <!-- Filas de datos con highlight naranja suave al hover -->
+      <tr mat-row *matRowDef="let row; columns: displayedColumns" class="transition hover:!bg-orange-50/50"></tr>
+    </table>
+  </div>
+</section>
